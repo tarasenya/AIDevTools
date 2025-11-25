@@ -1,0 +1,56 @@
+{% extends 'todos/base.html' %}
+
+{% block title %}TODO List{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>My TODOs</h1>
+            <a href="{% url 'todo_create' %}" class="btn btn-primary">+ Add New TODO</a>
+        </div>
+
+        {% if todos %}
+            <div class="list-group">
+                {% for todo in todos %}
+                <div class="list-group-item {% if todo.resolved %}resolved{% endif %}">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div class="flex-grow-1">
+                            <h5 class="mb-1">{{ todo.title }}</h5>
+                            {% if todo.description %}
+                            <p class="mb-1">{{ todo.description }}</p>
+                            {% endif %}
+                            <small class="text-muted">
+                                {% if todo.due_date %}
+                                    Due: {{ todo.due_date|date:"Y-m-d" }}
+                                {% else %}
+                                    No due date
+                                {% endif %}
+                                | Created: {{ todo.created_at|date:"Y-m-d H:i" }}
+                            </small>
+                        </div>
+                        <div class="btn-group" role="group">
+                            <a href="{% url 'todo_toggle' todo.pk %}"
+                               class="btn btn-sm {% if todo.resolved %}btn-warning{% else %}btn-success{% endif %}">
+                                {% if todo.resolved %}Reopen{% else %}Mark Done{% endif %}
+                            </a>
+                            <a href="{% url 'todo_update' todo.pk %}" class="btn btn-sm btn-outline-primary">Edit</a>
+                            <a href="{% url 'todo_delete' todo.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
+                        </div>
+                    </div>
+                    {% if todo.resolved %}
+                    <span class="badge bg-success mt-2">Completed</span>
+                    {% else %}
+                    <span class="badge bg-warning mt-2">Pending</span>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-info" role="alert">
+                No TODOs yet. <a href="{% url 'todo_create' %}" class="alert-link">Create your first TODO!</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
