@@ -33,7 +33,7 @@ What's the next step you need to take?
 
 - Run the application
 - Add the models to the admin panel
-- Run migrations
+- Run migrations <-- this
 - Create a makefile
 
 
